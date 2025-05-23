@@ -1,6 +1,6 @@
-package OnePower.modcore;
+package OneMonster.modcore;
 
-import OnePower.ui.BreedsearchButton;
+import OneMonster.ui.BreedsearchButton;
 import basemod.*;
 import basemod.abstracts.CustomSavable;
 import basemod.interfaces.*;
@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.evacipated.cardcrawl.modthespire.lib.SpireConfig;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.Gson;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
@@ -21,30 +20,23 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import loadout.LoadoutMod;
 import loadout.relics.AllInOneBag;
-import loadout.relics.PowerGiver;
 import loadout.uiElements.ModLabeledDropdown;
-import loadout.util.ModConfig;
-import loadout.util.SkinManager;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
-import static OnePower.ui.BreedsearchButton.placeholderCard;
-import static OnePower.ui.BreedsearchButton.savedPowers;
+import static OneMonster.ui.BreedsearchButton.placeholderCard;
+import static OneMonster.ui.BreedsearchButton.savedPowers;
 import static basemod.BaseMod.registerModBadge;
 import static com.megacrit.cardcrawl.core.Settings.language;
 import static loadout.relics.PowerGiver.getPower;
-import static loadout.screens.PowerSelectScreen.dummyPlayer;
 
 
 @SpireInitializer
-public class OnePower implements PostInitializeSubscriber,EditKeywordsSubscriber,OnStartBattleSubscriber,CustomSavable,PostPowerApplySubscriber, StartActSubscriber , EditStringsSubscriber, EditRelicsSubscriber { // 实现接口
-    public OnePower() {
+public class OneMonster implements PostInitializeSubscriber,EditKeywordsSubscriber,OnStartBattleSubscriber,CustomSavable,PostPowerApplySubscriber, StartActSubscriber , EditStringsSubscriber, EditRelicsSubscriber { // 实现接口
+    public OneMonster() {
         BaseMod.subscribe(this); // 告诉basemod你要订阅事件
     }
     public static final String MyModID = "Muban";
@@ -52,8 +44,8 @@ public class OnePower implements PostInitializeSubscriber,EditKeywordsSubscriber
     public static SpireConfig config;
     public static void initialize() throws IOException {
 
-        new OnePower();
-        config=new SpireConfig("OnePower","OnePower");
+        new OneMonster();
+        config=new SpireConfig("OneMonster", "OneMonster");
         config.load();
     }
 
@@ -245,8 +237,8 @@ public class OnePower implements PostInitializeSubscriber,EditKeywordsSubscriber
         settingsPanel.addUIElement(BuffChange);
         settingsPanel.addUIElement(deBuffChangeM);
         settingsPanel.addUIElement(deBuffChange);
-        Texture badgeTexture = new Texture(Gdx.files.internal("OnePowerResources/images/relics/MyRelic.png"));
-        registerModBadge(badgeTexture, "OnePower", "Butterfly Norm", "这是一段描述", settingsPanel);
+        Texture badgeTexture = new Texture(Gdx.files.internal("OneMonsterResources/images/relics/MyRelic.png"));
+        registerModBadge(badgeTexture, "OneMonster", "Butterfly Norm", "这是一段描述", settingsPanel);
     }
 
     @Override
@@ -283,7 +275,7 @@ public class OnePower implements PostInitializeSubscriber,EditKeywordsSubscriber
             lang = "ZHS";
         }
 
-        String json = Gdx.files.internal("OnePowerResources/localization/" + lang + "/keywords.json")
+        String json = Gdx.files.internal("OneMonsterResources/localization/" + lang + "/keywords.json")
                 .readString(String.valueOf(StandardCharsets.UTF_8));
         Keyword[] keywords = gson.fromJson(json, Keyword[].class);
         /*

@@ -1,33 +1,18 @@
-package OnePower.patchs;
+package OneMonster.patchs;
 
-import OnePower.ui.PowerButton;
-import OnePower.utils.Invoker;
-import basemod.BaseMod;
-import basemod.EasyConfigPanel;
+import OneMonster.utils.Invoker;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
-import com.megacrit.cardcrawl.actions.common.ReducePowerAction;
-import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.cards.blue.Hyperbeam;
 import com.megacrit.cardcrawl.cards.colorless.Madness;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.events.city.Beggar;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import com.megacrit.cardcrawl.powers.FocusPower;
-import loadout.LoadoutMod;
-import loadout.relics.PowerGiver;
-import loadout.screens.PowerSelectScreen;
 
-import java.util.Iterator;
-
-import static OnePower.modcore.OnePower.config;
-import static OnePower.ui.BreedsearchButton.pid;
-import static OnePower.ui.BreedsearchButton.savedPowers;
+import static OneMonster.modcore.OneMonster.config;
+import static OneMonster.ui.BreedsearchButton.savedPowers;
 import static loadout.relics.PowerGiver.getPower;
-import static loadout.screens.PowerSelectScreen.dummyPlayer;
 
 
 @SpirePatch(

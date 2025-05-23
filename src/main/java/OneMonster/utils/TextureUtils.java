@@ -1,4 +1,4 @@
-package OnePower.utils;
+package OneMonster.utils;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.Pixmap;

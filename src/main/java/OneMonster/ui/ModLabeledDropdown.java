@@ -3,7 +3,7 @@
 // (powered by FernFlower decompiler)
 //
 
-package OnePower.ui;
+package OneMonster.ui;
 
 import basemod.IUIElement;
 import basemod.ModLabel;
