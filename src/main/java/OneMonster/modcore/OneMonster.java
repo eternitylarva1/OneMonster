@@ -1,5 +1,6 @@
 package OneMonster.modcore;
 
+import OneMonster.patchs.Money;
 import OneMonster.ui.BreedsearchButton;
 import basemod.*;
 import basemod.abstracts.CustomSavable;
@@ -15,6 +16,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.localization.Keyword;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.monsters.exordium.ApologySlime;
 import com.megacrit.cardcrawl.monsters.exordium.Cultist;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
@@ -32,6 +34,7 @@ import static OneMonster.ui.BreedsearchButton.savedPowers;
 import static basemod.BaseMod.registerModBadge;
 import static com.megacrit.cardcrawl.core.Settings.language;
 import static loadout.relics.PowerGiver.getPower;
+import static loadout.screens.MonsterSelectScreen.MonsterButton.createMonster;
 
 
 @SpireInitializer
@@ -103,9 +106,9 @@ public class OneMonster implements PostInitializeSubscriber,EditKeywordsSubscrib
                 throw new RuntimeException(e);
             }
         };
-        ModLabeledToggleButton bool = new   ModLabeledToggleButton("负数？", startingXPos-getXPos(1000)+getXPos(400), settingYPos-getYPos(64.0f)*2, Color.WHITE, FontHelper.buttonLabelFont, config.getBool("bool"),settingsPanel, (label) -> {
+        ModLabeledToggleButton bool = new   ModLabeledToggleButton("继承血量和buff？", startingXPos-getXPos(1000)+getXPos(400), settingYPos-getYPos(64.0f)*2, Color.WHITE, FontHelper.buttonLabelFont, config.getBool("bool"),settingsPanel, (label) -> {
         },clickAction);
-        ModLabeledToggleButton bool1 = new   ModLabeledToggleButton("负数？", startingXPos+getXPos(200), settingYPos-getYPos(64.0f)*2, Color.WHITE, FontHelper.buttonLabelFont, config.getBool("bool1"),settingsPanel, (label) -> {
+        ModLabeledToggleButton bool1 = new   ModLabeledToggleButton("自适应攻击力?(根据层数调整攻击力)", startingXPos+getXPos(200), settingYPos-getYPos(64.0f)*2, Color.WHITE, FontHelper.buttonLabelFont, config.getBool("bool1"),settingsPanel, (label) -> {
         },clickAction1);
         ModPanel settingsPanel = new ModPanel();
         ArrayList<String> tempNames = new ArrayList<>();
@@ -113,24 +116,25 @@ public class OneMonster implements PostInitializeSubscriber,EditKeywordsSubscrib
         int index = 1; // 用于跟踪当前插入的位置
         AbstractMonster Cultist=new Cultist(0,0);
         tempNames.add("无");
-        savedPowers.put(0,"无");
-        for (String pID : LoadoutMod.powersToDisplay.keySet()) {
-            tempids.add(pID);
-            AbstractPower p = getPower(pID, 1, Cultist, placeholderCard);
-            if (p != null&&p.name!=null&&!p.name.contains("Missing")) {
+        savedPowers.put(0, Cultist.class);
+        for(Class<? extends AbstractMonster> monsterC : LoadoutMod.baseGameMonsterMap.values()) {
+            AbstractMonster p =createMonster(monsterC);
+            if (p != null&&p.name!=null&&!(p instanceof ApologySlime)) {
                 tempNames.add(p.name); // 将当前 power 的 names 添加进去
-                savedPowers.put( index++,pID);
+                savedPowers.put( index++,monsterC);
             }
         }
-        System.out.println(tempNames);
-        BreedsearchButton.charOptions = tempNames.toArray(new String[0]);
-        ModLabel label1 = new ModLabel("玩家身上debuff->？", startingXPos-getXPos(1000), settingYPos, Color.WHITE, FontHelper.buttonLabelFont, settingsPanel, (label) -> {
+
+
+        System.out.println(tempNames);/*
+        BreedsearchButton.charOptions = tempNames.toArray(new String[0]);*/
+        ModLabel label1 = new ModLabel("一层怪物->？", startingXPos-getXPos(1000), settingYPos, Color.WHITE, FontHelper.buttonLabelFont, settingsPanel, (label) -> {
+        });//玩家身上buff
+        ModLabel label2 = new ModLabel("二层怪物->？", startingXPos-getXPos(200), settingYPos, Color.WHITE, FontHelper.buttonLabelFont, settingsPanel, (label) -> {
         });
-        ModLabel label2 = new ModLabel("玩家身上buff->？", startingXPos-getXPos(200), settingYPos, Color.WHITE, FontHelper.buttonLabelFont, settingsPanel, (label) -> {
+        ModLabel label3 = new ModLabel("三层怪物->？", startingXPos-getXPos(1000), settingYPos-getYPos(64.0f), Color.WHITE, FontHelper.buttonLabelFont, settingsPanel, (label) -> {
         });
-        ModLabel label3 = new ModLabel("怪物身上debuff->？", startingXPos-getXPos(1000), settingYPos-getYPos(64.0f), Color.WHITE, FontHelper.buttonLabelFont, settingsPanel, (label) -> {
-        });
-        ModLabel label4 = new ModLabel("怪物身上buff->？", startingXPos-getXPos(200), settingYPos-getYPos(64.0f), Color.WHITE, FontHelper.buttonLabelFont, settingsPanel, (label) -> {
+        ModLabel label4 = new ModLabel("四层怪物->？", startingXPos-getXPos(200), settingYPos-getYPos(64.0f), Color.WHITE, FontHelper.buttonLabelFont, settingsPanel, (label) -> {
         });
         ModLabeledDropdown BuffChange = new ModLabeledDropdown("", (String)null, startingXPos+Settings.WIDTH/6.4f, settingYPos+Settings.HEIGHT/4.32f, Settings.CREAM_COLOR, FontHelper.charDescFont, settingsPanel, tempNames, (label) -> {
         }, (dropdownMenu) -> {
@@ -145,7 +149,7 @@ public class OneMonster implements PostInitializeSubscriber,EditKeywordsSubscrib
         }, (i, skinName) -> {
             try {
 
-                config.setInt("setted_Index", i);
+                config.setInt("monster1", i);
                 config.save();
             } catch (Exception var3) {
                 var3.printStackTrace();
@@ -165,7 +169,7 @@ public class OneMonster implements PostInitializeSubscriber,EditKeywordsSubscrib
         }, (i, skinName) -> {
             try {
 
-                config.setInt("setted_Index2", i);
+                config.setInt("monster2", i);
                 config.save();
             } catch (Exception var3) {
                 var3.printStackTrace();
@@ -186,7 +190,7 @@ public class OneMonster implements PostInitializeSubscriber,EditKeywordsSubscrib
         }, (i, skinName) -> {
             try {
 
-                config.setInt("setted_Index1", i);
+                config.setInt("monster3", i);
                 config.save();
             } catch (Exception var3) {
                 var3.printStackTrace();
@@ -199,6 +203,7 @@ public class OneMonster implements PostInitializeSubscriber,EditKeywordsSubscrib
                 AllInOneBag.INSTANCE.showRelics();
             }
 
+
             if (!dropdownMenu.getHitbox().hovered && AllInOneBag.isSelectionScreenUp) {
                 AllInOneBag.INSTANCE.hideAllRelics();
             }
@@ -206,27 +211,27 @@ public class OneMonster implements PostInitializeSubscriber,EditKeywordsSubscrib
         }, (i, skinName) -> {
             try {
 
-                config.setInt("setted_Index3", i);
+                config.setInt("monster", i);
                 config.save();
             } catch (Exception var3) {
                 var3.printStackTrace();
             }
 
         });
-        if (!config.has("setted_Index")){
-            config.setInt("setted_Index", 0);
+        if (!config.has("monster1")){
+            config.setInt("monster1", 0);
         }
-        if (!config.has("setted_Index1")){
-            config.setInt("setted_Index1", 0);
+        if (!config.has("monster2")){
+            config.setInt("monster2", 0);
         }
-        if (!config.has("setted_Index2")){
-            config.setInt("setted_Index2", 0);
+        if (!config.has("monster3")){
+            config.setInt("monster3", 0);
         }
-        if (!config.has("setted_Index3")){
-            config.setInt("setted_Index3", 0);
+        if (!config.has("monster4")){
+            config.setInt("monster4", 0);
         }
-        BuffChange.dropdownMenu.setSelectedIndex(Integer.valueOf(config.getInt("setted_Index")));
-        deBuffChange.dropdownMenu.setSelectedIndex(Integer.valueOf(config.getInt("setted_Index1")));
+        BuffChange.dropdownMenu.setSelectedIndex(Integer.valueOf(config.getInt("monster1")));
+        deBuffChange.dropdownMenu.setSelectedIndex(Integer.valueOf(config.getInt("monster2")));
         settingsPanel.addUIElement(label1);
         settingsPanel.addUIElement(label2);
         settingsPanel.addUIElement(label3);
@@ -265,25 +270,11 @@ public class OneMonster implements PostInitializeSubscriber,EditKeywordsSubscrib
 
     @Override
     public void receiveOnBattleStart(AbstractRoom abstractRoom) {
+        Money.roll_monster();
     }
 
     @Override
     public void receiveEditKeywords() {
-        Gson gson = new Gson();
-        String lang = "ENG";
-        if (language == Settings.GameLanguage.ZHS) {
-            lang = "ZHS";
-        }
 
-        String json = Gdx.files.internal("OneMonsterResources/localization/" + lang + "/keywords.json")
-                .readString(String.valueOf(StandardCharsets.UTF_8));
-        Keyword[] keywords = gson.fromJson(json, Keyword[].class);
-        /*
-        if (keywords != null) {
-            for (Keyword keyword : keywords) {
-                // 这个id要全小写
-                BaseMod.addKeyword("muban", keyword.NAMES[0], keyword.NAMES, keyword.DESCRIPTION);
-            }
-        }*/
     }
 }

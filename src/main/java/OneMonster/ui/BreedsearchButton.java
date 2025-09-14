@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.screens.options.DropdownMenu;
 import com.megacrit.cardcrawl.screens.options.DropdownMenuListener;
 import loadout.relics.PowerGiver;
@@ -23,14 +24,14 @@ public class BreedsearchButton extends TopPanelItem {
     public static final PowerGiver pg=new PowerGiver();
     public static PowerSelectScreen powerSelectScreen=new PowerSelectScreen(pg);
     public static AbstractCard placeholderCard=new Madness();
-    public static HashMap<Integer, String> savedPowers = new HashMap<>();
+    public static HashMap<Integer, Class<? extends AbstractMonster>> savedPowers = new HashMap<>();
     public static String[] charOptions = {};
     public static String pid="";
     DropdownMenuListener listener = new DropdownMenuListener() {
         @Override
         public void changedSelectionTo(DropdownMenu menu, int selectedIndex, String selectedText) {
             if((savedPowers.containsKey(selectedIndex))) {
-                pid = savedPowers.get(selectedIndex);
+
             }
             // 在这里处理选中变化的逻辑（例如打印或更新UI）
             System.out.println("选中索引：" + selectedIndex + "，文本：" + selectedText);
